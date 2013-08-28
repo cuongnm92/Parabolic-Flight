@@ -1,0 +1,10 @@
+package com.vnu.parabolicflight.util;
+
+public class Data {
+	private float x,y,z;
+	private long time;
+	
+	public Data(float x,float y,float z,long time) {
+		
+	}
+}

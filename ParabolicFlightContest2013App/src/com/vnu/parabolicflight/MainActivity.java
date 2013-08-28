@@ -1,7 +1,5 @@
 package com.vnu.parabolicflight;
 
-import com.vnu.parabolicflight.util.Writer;
-
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -13,10 +11,7 @@ import android.widget.Button;
 public class MainActivity extends Activity {
 
 	Button startButton;
-	Intent intent;
-	Writer writer;
-	String fileName;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -26,15 +21,8 @@ public class MainActivity extends Activity {
 		startButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View arg0) {
-				writer = new Writer();
-				writer.creatNewFile();
-				fileName = writer.getFileName();
-
-				intent = new Intent(MainActivity.this, MeasureActivity.class);
-
-				Bundle b = new Bundle();
-				b.putString("file", fileName);
-				intent.putExtras(b);
+				
+				Intent intent = new Intent(MainActivity.this, MeasureActivity.class);
 				startActivity(intent);
 				finish();
 			}

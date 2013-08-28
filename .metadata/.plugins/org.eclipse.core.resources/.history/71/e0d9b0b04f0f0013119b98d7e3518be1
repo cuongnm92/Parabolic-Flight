@@ -1,0 +1,8 @@
+package com.vnu.parabolicflight.util;
+
+public class Data {
+	private float x,y,z;
+	private long time;
+	
+	
+}

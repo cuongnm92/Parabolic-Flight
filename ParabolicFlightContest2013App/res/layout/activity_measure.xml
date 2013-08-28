@@ -142,7 +142,7 @@
             android:id="@+id/stop_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/export_button"
+            android:layout_above="@+id/return_button"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
@@ -153,7 +153,7 @@
             android:textSize="20sp" />
 
         <Button
-            android:id="@+id/export_button"
+            android:id="@+id/return_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -161,7 +161,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:background="#3fbdf0"
-            android:text="@string/export_button"
+            android:text="@string/return_button"
             android:textColor="#ffffff"
             android:textScaleX="1.5"
             android:textSize="20sp" />

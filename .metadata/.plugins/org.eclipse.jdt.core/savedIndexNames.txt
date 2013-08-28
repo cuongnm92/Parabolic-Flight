@@ -1,9 +1,4 @@
 INDEX VERSION 1.126+E:\Projects\GithubProjects\Parabolic-Flight\.metadata\.plugins\org.eclipse.jdt.core
-4004065240.index
-876529481.index
-1544149824.index
-3812648037.index
+101320749.index
 3927586381.index
 3750254701.index
-3860111099.index
-2272897410.index

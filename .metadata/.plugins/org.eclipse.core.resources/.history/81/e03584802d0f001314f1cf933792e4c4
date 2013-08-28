@@ -1,0 +1,54 @@
+package com.vnu.parabolicflight.util;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.StringTokenizer;
+
+public class DataWriting {
+
+	public static void dataWriting(File fileData, File gyroscopeDataFile,
+			File accelerometerDataFile, File gravityDataFile) {
+
+		BufferedReader gyroscopeBuffered = null, accelerometerBuffered = null, gravityBuffered = null;
+		float time;
+		float[] accelerometer = new float[3];
+		float[] accelerometer = new float[3];
+		float[] accelerometer = new float[3];
+		
+		try {
+			gyroscopeBuffered = new BufferedReader(new FileReader(
+					gyroscopeDataFile.getAbsoluteFile()));
+			
+			accelerometerBuffered = new BufferedReader(new FileReader(
+					accelerometerDataFile.getAbsoluteFile()));
+			
+			gravityBuffered = new BufferedReader(new FileReader(
+					gravityDataFile.getAbsoluteFile()));
+
+			String gyroLine = null, accLine = null, graLine = null;
+
+			while ((gyroLine = gyroscopeBuffered.readLine()) != null
+					|| (accLine = accelerometerBuffered.readLine()) != null
+					|| (graLine = gravityBuffered.readLine()) != null) {
+				 	
+				 StringTokenizer acc = new java.util.StringTokenizer(accLine, " ");
+				 accelerometer = Float.valueOf(acc.nextToken()).floatValue();
+				 time = Float.valueOf(acc.nextToken()).floatValue();   
+			}
+		} catch (IOException e) {
+		} finally {
+			try {
+				if (gyroscopeBuffered != null)
+					gyroscopeBuffered.close();
+				if (accelerometerBuffered != null)
+					accelerometerBuffered.close();
+				if (gravityBuffered != null)
+					gravityBuffered.close();
+			} catch (IOException ex) {
+			}
+		}
+
+	}
+}

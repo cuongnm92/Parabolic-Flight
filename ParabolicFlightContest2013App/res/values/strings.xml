@@ -6,9 +6,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="start_button"> START </string>
     <string name="display_title"> Log File : </string>
-    <string name="stop_button"> STOP </string>
+    <string name="stop_button"> STOP AND EXPORT </string>
     <string name="return_button"> RETURN </string>
-    <string name="export_button"> STOP AND EXPORT </string>
     <string name="team_name"> TEAM VIETNAM, UET-VNU </string>
     <string name="title_activity_measure">MeasureActivity</string>
     <string name="gyroscope_title"> Gyroscope log (rad/s) </string>
