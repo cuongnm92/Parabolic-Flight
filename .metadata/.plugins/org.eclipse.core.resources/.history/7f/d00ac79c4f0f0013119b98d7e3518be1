@@ -1,5 +1,0 @@
-package com.vnu.parabolicflight.util;
-
-public class Data {
-	float x,y,z;
-}
