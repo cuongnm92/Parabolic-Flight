@@ -228,13 +228,17 @@ public class MeasureActivity extends Activity {
 
 	public void sensorRegister() {
 
-		int rating = 100000;
-
-		mSensorManager.registerListener(mGyroListener, mGyroSensor, rating);
-		mSensorManager.registerListener(mAccListener, mAccSensor, rating);
-		mSensorManager.registerListener(mGraListener, mGraSensor, rating);
+		// int rating = 100000;
+		
+		// mSensorManager.registerListener(mGyroListener, mGyroSensor, rating);
+		// mSensorManager.registerListener(mAccListener, mAccSensor, rating);
+		// mSensorManager.registerListener(mGraListener, mGraSensor, rating);
+		
+		mSensorManager.registerListener(mGyroListener, mGyroSensor, SensorManager.SENSOR_DELAY_FASTEST);
+		mSensorManager.registerListener(mGyroListener, mAccSensor, SensorManager.SENSOR_DELAY_FASTEST);
+		mSensorManager.registerListener(mGyroListener, mGraSensor, SensorManager.SENSOR_DELAY_FASTEST);
 	}
-
+	
 	public void sensorUnregister() {
 		mSensorManager.unregisterListener(mGyroListener, mGyroSensor);
 		mSensorManager.unregisterListener(mAccListener, mGyroSensor);
