@@ -1,3 +1,0 @@
-INDEX VERSION 1.126+E:\Projects\GithubProjects\Parabolic-Flight\version 02\.metadata\.plugins\org.eclipse.jdt.core
-3750254701.index
-101320749.index
