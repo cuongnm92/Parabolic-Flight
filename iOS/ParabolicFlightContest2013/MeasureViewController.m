@@ -7,7 +7,7 @@
 //
 
 #import "MeasureViewController.h"
-
+#import "FirstViewController.h"
 @interface MeasureViewController ()
 
 @end
@@ -29,9 +29,9 @@
     // Do any additional setup after loading the view from its nib.
     
     self.motionManager = [[CMMotionManager alloc] init];
-    self.motionManager.accelerometerUpdateInterval = 0.1;
-    self.motionManager.gyroUpdateInterval = 0.1;
-    self.motionManager.deviceMotionUpdateInterval = 0.1;
+    self.motionManager.accelerometerUpdateInterval = 1/10;
+    self.motionManager.gyroUpdateInterval = 1/10;
+    self.motionManager.deviceMotionUpdateInterval = 1/10;
     currentState = 0;
     // self.motionManager.
     
@@ -109,7 +109,7 @@
 
 - (void) processAccel:(CMAccelerometerData*)accelData withError:(NSError*)error {
     
-     _rawAccelerometerString = [_rawAccelerometerString stringByAppendingFormat:@"%f,%f,%f,%f\n", accelData.timestamp,
+     _rawAccelerometerString = [_rawAccelerometerString stringByAppendingFormat:@"%lld \n%f %f %f\n", (long long)(CACurrentMediaTime() * 1000),
                                    accelData.acceleration.x,
                                    accelData.acceleration.y,
                                    accelData.acceleration.z,
@@ -127,7 +127,7 @@
 
 - (void) processGyro:(CMGyroData*)gyroData withError:(NSError*)error {
     
-    _rawGyroscopeString = [_rawGyroscopeString stringByAppendingFormat:@"%f,%f,%f,%f\n", gyroData.timestamp,
+    _rawGyroscopeString = [_rawGyroscopeString stringByAppendingFormat:@"%lld \n%f %f %f\n", (long long)(CACurrentMediaTime() * 1000),
                                gyroData.rotationRate.x,
                                gyroData.rotationRate.y,
                                gyroData.rotationRate.z,
@@ -146,7 +146,7 @@
 - (void) processMotion:(CMDeviceMotion*)motion withError:(NSError*)error {
     
     
-     _gravityString = [_gravityString stringByAppendingFormat:@"%f,%f,%f,%f\n", motion.timestamp,
+     _gravityString = [_gravityString stringByAppendingFormat:@"%lld \n%f %f %f\n", (long long)(CACurrentMediaTime() * 1000),
                           motion.gravity.x,
                           motion.gravity.y,
                           motion.gravity.z,
@@ -173,26 +173,21 @@
     [dateFormatter setTimeStyle:NSDateFormatterLongStyle];
     [dateFormatter setDateStyle:NSDateFormatterShortStyle];
     
-    // Some filesystems hate colons
-    NSString *dateString = [[dateFormatter stringFromDate:[NSDate date]] stringByReplacingOccurrencesOfString:@":" withString:@"_"];
-    // I hate spaces
-    dateString = [dateString stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-    // Nobody can stand forward slashes
-    dateString = [dateString stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
+    // NSString *dateString = [NSString stringWithFormat:@"%d", CACurrentMediaTime() * 1000 - timeBegin];
     
     
-    NSString *fullPath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"gravity_%@.txt", dateString, nil]];
+    NSString *fullPath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"iphone-gravity-%lld.txt", timeBegin, nil]];
         
     [_gravityString writeToFile:fullPath atomically:NO encoding:NSStringEncodingConversionAllowLossy error:nil];
         _gravityString = @"";
     
     
-    fullPath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"rawGyroscope_%@.txt", dateString, nil]];
+    fullPath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"iphone-gyroscope-%lld.txt", timeBegin, nil]];
         
     [_rawGyroscopeString writeToFile:fullPath atomically:NO encoding:NSStringEncodingConversionAllowLossy error:nil];
     _rawGyroscopeString = @"";
     
-    fullPath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"rawAccelerometer_%@.txt", dateString, nil]];
+    fullPath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"iphone-accelerometer-%lld.txt", timeBegin, nil]];
     [_rawAccelerometerString writeToFile:fullPath atomically:NO encoding:NSStringEncodingConversionAllowLossy error:nil];
     _rawAccelerometerString = @"";
 }
@@ -204,13 +199,15 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)ReturnButtonAction:(id)sender {
+- (IBAction)ReturnButtonAction:(id)sender { 
+    [self presentViewController:[[FirstViewController alloc]  initWithNibName:@"FirstViewController" bundle:nil] animated:NO completion:nil];
 }
 
 - (IBAction)StartButtonAction:(id)sender {
     if (currentState == 0) {
         currentState = 1;
         [_StartButton setTitle:@"STOP AND EXPORT LOG FILE" forState:UIControlStateNormal];
+        timeBegin = (long long)(CACurrentMediaTime() * 1000);
         [self startLoggingMotionData];
     } else if (currentState == 1) {
         currentState = 2;

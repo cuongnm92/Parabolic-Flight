@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		016C91BD181F66D200C7578B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 016C91BB181F66D200C7578B /* ViewController.m */; };
+		016C91BE181F66D200C7578B /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 016C91BC181F66D200C7578B /* ViewController.xib */; };
 		AB90EA58181E125C00427051 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB90EA57181E125C00427051 /* UIKit.framework */; };
 		AB90EA5A181E125C00427051 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB90EA59181E125C00427051 /* Foundation.framework */; };
 		AB90EA5C181E125C00427051 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB90EA5B181E125C00427051 /* CoreGraphics.framework */; };
@@ -32,6 +34,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		016C91BA181F66D200C7578B /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		016C91BB181F66D200C7578B /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		016C91BC181F66D200C7578B /* ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = "<group>"; };
 		AB90EA54181E125C00427051 /* ParabolicFlightContest2013.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParabolicFlightContest2013.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB90EA57181E125C00427051 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		AB90EA59181E125C00427051 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -42,7 +47,7 @@
 		AB90EA65181E125C00427051 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		AB90EA67181E125C00427051 /* ParabolicFlightContest2013-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ParabolicFlightContest2013-Prefix.pch"; sourceTree = "<group>"; };
 		AB90EA68181E125C00427051 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		AB90EA69181E125C00427051 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		AB90EA69181E125C00427051 /* AppDelegate.m */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; tabWidth = 4; };
 		AB90EA6B181E125C00427051 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		AB90EA6D181E125C00427051 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		AB90EA6F181E125C00427051 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -122,6 +127,9 @@
 				AB90EA69181E125C00427051 /* AppDelegate.m */,
 				AB90EA71181E125C00427051 /* ParabolicFlightContest2013.xcdatamodeld */,
 				AB90EA60181E125C00427051 /* Supporting Files */,
+				016C91BA181F66D200C7578B /* ViewController.h */,
+				016C91BB181F66D200C7578B /* ViewController.m */,
+				016C91BC181F66D200C7578B /* ViewController.xib */,
 			);
 			path = ParabolicFlightContest2013;
 			sourceTree = "<group>";
@@ -207,6 +215,7 @@
 				AB90EA82181E12D300427051 /* para@2x.png in Resources */,
 				AB90EA87181E12E800427051 /* FirstViewController.xib in Resources */,
 				ABBDDF9D181F54EB0054108F /* MeasureViewController.xib in Resources */,
+				016C91BE181F66D200C7578B /* ViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,6 +231,7 @@
 				AB90EA73181E125C00427051 /* ParabolicFlightContest2013.xcdatamodeld in Sources */,
 				AB90EA86181E12E800427051 /* FirstViewController.m in Sources */,
 				ABBDDF9C181F54EB0054108F /* MeasureViewController.m in Sources */,
+				016C91BD181F66D200C7578B /* ViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

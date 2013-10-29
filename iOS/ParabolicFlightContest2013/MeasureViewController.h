@@ -26,6 +26,7 @@
     bool _logGravityData;
     bool _logRawGyroscopeData;
     bool _logRawAccelerometerData;
+    long long timeBegin;
 }
 
 - (IBAction)ReturnButtonAction:(id)sender;
