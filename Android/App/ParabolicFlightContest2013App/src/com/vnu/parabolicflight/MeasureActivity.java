@@ -34,6 +34,7 @@ public class MeasureActivity extends Activity {
 
 	private SensorManager mSensorManager;
 	private Sensor mGyroSensor, mAccSensor, mGraSensor;
+	private int currentState = 0;
 
 	TextView gyroscope_xval, gyroscope_yval, gyroscope_zval;
 	TextView accelerometer_xval, accelerometer_yval, accelerometer_zval;
@@ -67,77 +68,84 @@ public class MeasureActivity extends Activity {
 		gravity_xval = (TextView) findViewById(R.id.gravity_xval);
 		gravity_yval = (TextView) findViewById(R.id.gravity_yval);
 		gravity_zval = (TextView) findViewById(R.id.gravity_zval);
-		
+
 		returnButton = (Button) findViewById(R.id.return_button);
 		returnButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
-				Intent intent1 = new Intent(MeasureActivity.this, MainActivity.class);
+				Intent intent1 = new Intent(MeasureActivity.this,
+						MainActivity.class);
 				startActivity(intent1);
 				finish();
 			}
 		});
-		
+
 		stopButton = (Button) findViewById(R.id.stop_button);
 		stopButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View arg0) {
 
-				if (display) {
-					final CharSequence[] items = { "accelerometer",
-							"gyroscope", "gravity" };
-
-					AlertDialog.Builder builder = new AlertDialog.Builder(
-							MeasureActivity.this);
-					builder.setTitle(R.string.title_display_dialog);
-					builder.setItems(items,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int item) {
-									Intent intent = new Intent(
-											MeasureActivity.this,
-											DisplayActivity.class);
-									Bundle b = new Bundle();
-									b.putString("file", items[item].toString()
-											+ "-" + START_TIME);
-									intent.putExtras(b);
-									startActivity(intent);
-									finish();
-								}
-							});
-					AlertDialog alert = builder.create();
-					alert.show();
-
+				if (currentState == 0) {
+					stopButton.setText("STOP AND EXPORT");
+					currentState = 1;
 				} else {
-					display = true;
-					notStop = false;
 
-					progressDialog = ProgressDialog.show(MeasureActivity.this,
-							"", "Exporting data...");
+					if (display) {
+						final CharSequence[] items = { "accelerometer",
+								"gyroscope", "gravity" };
 
-					new Thread() {
+						AlertDialog.Builder builder = new AlertDialog.Builder(
+								MeasureActivity.this);
+						builder.setTitle(R.string.title_display_dialog);
+						builder.setItems(items,
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int item) {
+										Intent intent = new Intent(
+												MeasureActivity.this,
+												DisplayActivity.class);
+										Bundle b = new Bundle();
+										b.putString("file",
+												items[item].toString() + "-"
+														+ START_TIME);
+										intent.putExtras(b);
+										startActivity(intent);
+										finish();
+									}
+								});
+						AlertDialog alert = builder.create();
+						alert.show();
 
-						public void run() {
+					} else {
+						display = true;
+						notStop = false;
 
-							try {
-								accelerometerFile.close();
-								gyroscopeFile.close();
-								gravityFile.close();
-							} catch (Exception e) {
-								Log.e("exporting_data", e.getMessage());
+						progressDialog = ProgressDialog.show(
+								MeasureActivity.this, "", "Exporting data...");
+
+						new Thread() {
+
+							public void run() {
+
+								try {
+									accelerometerFile.close();
+									gyroscopeFile.close();
+									gravityFile.close();
+								} catch (Exception e) {
+									Log.e("exporting_data", e.getMessage());
+								}
+
+								progressDialog.dismiss();
 							}
 
-							progressDialog.dismiss();
-						}
+						}.start();
 
-					}.start();
-
-					stopButton.setText("DISPLAY LOG FILE");
+						stopButton.setText("DISPLAY LOG FILE");
+					}
 				}
 			}
 		});
 
 		initSensor();
-
 		try {
 			initFile();
 		} catch (IOException e) {
@@ -153,7 +161,7 @@ public class MeasureActivity extends Activity {
 	}
 
 	private void initFile() throws IOException {
-		accelerometerFile = FileWriterPointer(START_TIME,"accelerometer");
+		accelerometerFile = FileWriterPointer(START_TIME, "accelerometer");
 		gyroscopeFile = FileWriterPointer(START_TIME, "gyroscope");
 		gravityFile = FileWriterPointer(START_TIME, "gravity");
 	}
@@ -174,7 +182,7 @@ public class MeasureActivity extends Activity {
 
 		@Override
 		public void onSensorChanged(SensorEvent event) {
-			getGyroscope(event);
+			if (currentState == 1) getGyroscope(event);
 		}
 	};
 
@@ -188,7 +196,7 @@ public class MeasureActivity extends Activity {
 
 		@Override
 		public void onSensorChanged(SensorEvent event) {
-			getAccelerometer(event);
+			if (currentState == 1) getAccelerometer(event);
 		}
 	};
 
@@ -202,25 +210,44 @@ public class MeasureActivity extends Activity {
 
 		@Override
 		public void onSensorChanged(SensorEvent event) {
-			getGravity(event);
+			if (currentState == 1) getGravity(event);
 		}
 
 	};
 
 	private void getAccelerometer(SensorEvent event) {
+
+		/*
+		// Isolate the force of gravity with the low-pass filter.
+
+		float alpha;
+		float gravity[] = new float[4];
+
+		alpha = (float) 0.8;
+		gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
+		gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
+		gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
+
+		// Remove the gravity contribution with the high-pass filter.
+		float x = event.values[0] - gravity[0];
+		float y = event.values[1] - gravity[1];
+		float z = event.values[2] - gravity[2];
+		*/
+		
 		float x = event.values[0];
 		float y = event.values[1];
 		float z = event.values[2];
-
+		
 		if (notStop) {
 			try {
-				accelerometerFile.write(String.valueOf(System.currentTimeMillis()) + "\n");
-				accelerometerFile.write(Float.toString(x) + " " + Float.toString(y) + " " + Float.toString(z) + "\n");
+				accelerometerFile.write(String.valueOf(System
+						.currentTimeMillis()) + "\n");
+				accelerometerFile.write(Float.toString(x) + " "
+						+ Float.toString(y) + " " + Float.toString(z) + "\n");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
-			
+
 			accelerometer_xval.setText("x:" + "\t\t" + Float.toString(x));
 			accelerometer_yval.setText("y:" + "\t\t" + Float.toString(y));
 			accelerometer_zval.setText("z:" + "\t\t" + Float.toString(z));
@@ -234,8 +261,10 @@ public class MeasureActivity extends Activity {
 
 		if (notStop) {
 			try {
-				gyroscopeFile.write(String.valueOf(System.currentTimeMillis()) + "\n");
-				gyroscopeFile.write(Float.toString(x) + " " + Float.toString(y) + " " + Float.toString(z) + "\n");
+				gyroscopeFile.write(String.valueOf(System.currentTimeMillis())
+						+ "\n");
+				gyroscopeFile.write(Float.toString(x) + " " + Float.toString(y)
+						+ " " + Float.toString(z) + "\n");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -253,8 +282,10 @@ public class MeasureActivity extends Activity {
 
 		if (notStop) {
 			try {
-				gravityFile.write(String.valueOf(System.currentTimeMillis()) + "\n");
-				gravityFile.write(Float.toString(x) + " " + Float.toString(y) + " " + Float.toString(z) + "\n");
+				gravityFile.write(String.valueOf(System.currentTimeMillis())
+						+ "\n");
+				gravityFile.write(Float.toString(x) + " " + Float.toString(y)
+						+ " " + Float.toString(z) + "\n");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
