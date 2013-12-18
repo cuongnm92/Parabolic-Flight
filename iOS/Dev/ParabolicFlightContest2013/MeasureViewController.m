@@ -36,18 +36,7 @@
     self.motionManager.deviceMotionUpdateInterval = 1/10;
     currentState = 0;
     // self.motionManager.
-    
-    // Limiting the concurrent ops to 1 is a cheap way to avoid two handlers editing the same
-    // string at the same time.
-    _deviceMotionQueue = [[NSOperationQueue alloc] init];
-    [_deviceMotionQueue setMaxConcurrentOperationCount:1];
-    
-    _accelQueue = [[NSOperationQueue alloc] init];
-    [_accelQueue setMaxConcurrentOperationCount:1];
-    
-    _gyroQueue = [[NSOperationQueue alloc] init];
-    [_gyroQueue setMaxConcurrentOperationCount:1];
-    
+  
     _gravityString = [[NSString alloc] init];
     _rawGyroscopeString = [[NSString alloc] init];
     _rawAccelerometerString = [[NSString alloc] init];
@@ -84,11 +73,11 @@
     };
     
     
-    [_motionManager startDeviceMotionUpdatesToQueue:_deviceMotionQueue withHandler:motionHandler];
+    [_motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:motionHandler];
     
-    [_motionManager startGyroUpdatesToQueue:_gyroQueue withHandler:gyroHandler];
+    [_motionManager startGyroUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:gyroHandler];
     
-    [_motionManager startAccelerometerUpdatesToQueue:_accelQueue withHandler:accelHandler];
+    [_motionManager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:accelHandler];
 }
 
 - (void) stopLoggingMotionDataAndSave {
@@ -96,13 +85,10 @@
     NSLog(@"Stopping data logging.");
     
     [_motionManager stopDeviceMotionUpdates];
-    [_deviceMotionQueue waitUntilAllOperationsAreFinished];
     
     [_motionManager stopAccelerometerUpdates];
-    [_accelQueue waitUntilAllOperationsAreFinished];
     
     [_motionManager stopGyroUpdates];
-    [_gyroQueue waitUntilAllOperationsAreFinished];
     
     UIAlertView *alert;
     
@@ -124,19 +110,16 @@
     
     
     if (currentState == 1) {
-         _rawAccelerometerString = [_rawAccelerometerString stringByAppendingFormat:@"%lld \n%f %f %f\n", (long long)(CACurrentMediaTime() * 1000),
+        _rawAccelerometerString = [_rawAccelerometerString stringByAppendingFormat:@"%lld \n%f %f %f\n", (long long)(CACurrentMediaTime() * 1000),
                                    accelData.acceleration.x,
                                    accelData.acceleration.y,
                                    accelData.acceleration.z,
-                                   nil];
-    
-         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                   nil];  
         
-             //Do any updates to your label here
-           self.accelerometerX.text = [NSString stringWithFormat:@"X : %.3f",accelData.acceleration.x];
-           self.accelerometerY.text = [NSString stringWithFormat:@"Y : %.3f",accelData.acceleration.y];
-           self.accelerometerZ.text = [NSString stringWithFormat:@"Z : %.3f",accelData.acceleration.z];
-         }];
+             //Do updates to label
+        self.accelerometerX.text = [NSString stringWithFormat:@"X : %.3f",accelData.acceleration.x];
+        self.accelerometerY.text = [NSString stringWithFormat:@"Y : %.3f",accelData.acceleration.y];
+        self.accelerometerZ.text = [NSString stringWithFormat:@"Z : %.3f",accelData.acceleration.z];
     }
 }
 
@@ -148,34 +131,30 @@
                                gyroData.rotationRate.y,
                                gyroData.rotationRate.z,
                                nil];
-    
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+							   
+            //Do updates to label
+        self.GyroscopeX.text = [NSString stringWithFormat:@"X : %.3f",gyroData.rotationRate.x];
+        self.GyroscopeY.text = [NSString stringWithFormat:@"Y : %.3f",gyroData.rotationRate.y];
+        self.GyroscopeZ.text = [NSString stringWithFormat:@"Z : %.3f",gyroData.rotationRate.z];
         
-            //Do any updates to your label here
-            self.GyroscopeX.text = [NSString stringWithFormat:@"X : %.3f",gyroData.rotationRate.x];
-            self.GyroscopeY.text = [NSString stringWithFormat:@"Y : %.3f",gyroData.rotationRate.y];
-            self.GyroscopeZ.text = [NSString stringWithFormat:@"Z : %.3f",gyroData.rotationRate.z];
-        
-        }];
     }
 }
 
 - (void) processMotion:(CMDeviceMotion*)motion withError:(NSError*)error {
     
     if (currentState == 1) {
-          _gravityString = [_gravityString stringByAppendingFormat:@"%lld \n%f %f %f\n", (long long)(CACurrentMediaTime() * 1000),
+        _gravityString = [_gravityString stringByAppendingFormat:@"%lld \n%f %f %f\n", (long long)(CACurrentMediaTime() * 1000),
                           motion.gravity.x,
                           motion.gravity.y,
                           motion.gravity.z,
                           nil];
     
-           [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+           
         
-               //Do any updates to your label here
-               self.gravityX.text = [NSString stringWithFormat:@"X : %.3f",motion.gravity.x];
-               self.gravityY.text = [NSString stringWithFormat:@"Y : %.3f",motion.gravity.y];
-               self.gravityZ.text = [NSString stringWithFormat:@"Z : %.3f",motion.gravity.z];
-           }];
+        //Do updates to label 
+        self.gravityX.text = [NSString stringWithFormat:@"X : %.3f",motion.gravity.x];
+        self.gravityY.text = [NSString stringWithFormat:@"Y : %.3f",motion.gravity.y];
+        self.gravityZ.text = [NSString stringWithFormat:@"Z : %.3f",motion.gravity.z];  
     }
 }
 

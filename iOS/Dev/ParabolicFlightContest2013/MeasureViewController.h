@@ -15,14 +15,9 @@
 @interface MeasureViewController : UIViewController {
     int currentState;
     
-    NSOperationQueue *_deviceMotionQueue;
-    NSOperationQueue *_accelQueue;
-    NSOperationQueue *_gyroQueue;
-    
     NSString *_gravityString;
     NSString *_rawGyroscopeString;
     NSString *_rawAccelerometerString;
-    
     
     bool _logGravityData;
     bool _logRawGyroscopeData;
